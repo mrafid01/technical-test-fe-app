@@ -1,17 +1,10 @@
 'use client';
 
-import { SessionUser } from '@/interfaces/interfaces';
+import { SessionUser, Task } from '@/interfaces/interfaces';
+import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-
-interface Task {
-    id: number;
-    title: string;
-    description?: string;
-    dueDate: string;
-    completed: boolean;
-}
 
 export default function CalendarPage() {
     const { data: session, status } = useSession();
@@ -37,11 +30,10 @@ export default function CalendarPage() {
 
     const fetchTasks = async () => {
         if (idToken) {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/tasks`, {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/tasks`, {
                 headers: { Authorization: `Bearer ${idToken}` },
             });
-            const data = await res.json();
-            setTasks(data);
+            setTasks(res.data);
         }
     };
 

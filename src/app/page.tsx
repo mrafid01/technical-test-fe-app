@@ -43,7 +43,7 @@ export default function Dashboard() {
 
             <main className="w-full max-w-3xl mt-6 bg-white shadow-md rounded-lg p-6 text-center">
                 <h2 className="text-2xl font-semibold text-gray-800">Welcome, {session.user?.name}</h2>
-                <p className="text-gray-600 mt-2">Silahkan pilih menu yang tersedia.</p>
+                <p className="text-gray-600 mt-2">Get organized and stay on top of your tasks.</p>
             </main>
         </div>
     );

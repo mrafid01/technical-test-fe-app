@@ -1,43 +1,35 @@
 'use client';
-import { SessionUser } from '@/interfaces/interfaces';
+
+import { SessionUser, Task } from '@/interfaces/interfaces';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-interface Task {
-    id: number;
-    title: string;
-    description?: string;
-    dueDate: string;
-    completed: boolean;
-}
-
 export default function Tasks() {
     const { data: session, status } = useSession();
     const router = useRouter();
-    
+
     useEffect(() => {
         if (status === 'unauthenticated') {
             router.push('/login');
         }
     }, [status, router]);
-    
+
     if (status === 'loading') {
         return <div>Loading...</div>;
     }
-    
+
     if (!session) {
         return null;
     }
-    
+
     const [tasks, setTasks] = useState<Task[]>([]);
     const [newTask, setNewTask] = useState({ title: '', description: '', dueDate: '' });
     const { idToken } = session?.user as SessionUser;
     const fetchTasks = async () => {
         try {
             if (idToken) {
-                console.log(idToken);
                 const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/tasks`, {
                     headers: { Authorization: `Bearer ${idToken}` },
                 });
@@ -103,8 +95,7 @@ export default function Tasks() {
 
     const deleteTask = async (id: number) => {
         if (idToken) {
-            await fetch(`${process.env.NEXT_PUBLIC_BASE_API_URL}/tasks/${id}`, {
-                method: 'DELETE',
+            await axios.delete(`${process.env.NEXT_PUBLIC_BASE_API_URL}/tasks/${id}`, {
                 headers: { Authorization: `Bearer ${idToken}` },
             });
             fetchTasks();

@@ -41,14 +41,14 @@ export const authOptions: NextAuthOptions = {
                         console.log('User created or already exists:', response.data);
                     } else {
                         console.error('Failed to create or check user:', response.status, response.data);
-                        return true;
+                        return false;
                     }
                 } catch (error) {
                     console.error('Error during user creation/check:', error);
                     if (axios.isAxiosError(error)) {
                         console.error('Axios error details:', error.response?.data);
                     }
-                    return true;
+                    return false;
                 }
             }
             return true;
